@@ -2,7 +2,14 @@ import cv2
 import mediapipe as mp
 import time
 import math
+import socket
 
+import io
+from PIL import Image
+import numpy as np
+
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, 0)
+s.bind(("0.0.0.0", 9090))
 
 # 根据手指四个关节判断手指是否伸直
 def get_angleError(point_4,point_3,point_2,point_1):
@@ -54,7 +61,14 @@ mpDraw = mp.solutions.drawing_utils
 pTime = 0
 cTime = 0
 while True:
-    success, img = cap.read()
+    data, IP = s.recvfrom(100000)
+    bytes_stream = io.BytesIO(data)
+    image = Image.open(bytes_stream)
+    img = np.asarray(image)
+    img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)  # ESP32采集的是RGB格式，要转换为BGR（opencv的格式）
+
+
+    #success, img = cap.read()
     img = cv2.flip(img, 1)
     imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     results = hands.process(imgRGB)
