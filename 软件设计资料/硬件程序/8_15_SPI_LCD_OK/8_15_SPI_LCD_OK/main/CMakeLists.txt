@@ -1,0 +1,10 @@
+idf_component_register(
+        SRC_DIRS 
+        "./"
+        "./APP/Display_APP"
+        "./APP/Display_APP/lvgl_test_demo"
+        INCLUDE_DIRS 
+        "./"
+        "./APP/Display_APP"
+        "./APP/Display_APP/lvgl_test_demo"
+)
